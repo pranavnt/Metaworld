@@ -186,11 +186,11 @@ def _create_observable_goal_envs(all_envs: EnvDict) -> EnvDict:
             super(type(env), env).__init__()
 
             env._partially_observable = False
-            env._freeze_rand_vec = False
+
             env._set_task_called = True
             env.render_mode = render_mode
             env.reset()
-            env._freeze_rand_vec = True
+
             if seed is not None:
                 env.seed(seed)
                 np.random.set_state(st0)
