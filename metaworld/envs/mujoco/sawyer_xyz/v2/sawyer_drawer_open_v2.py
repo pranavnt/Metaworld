@@ -35,11 +35,10 @@ class SawyerDrawerOpenEnvV2(SawyerXYZEnv):
         self.init_config: InitConfigDict = {
             "obj_init_angle": 0.3,
             "obj_init_pos": np.array([0.0, 0.9, 0.0], dtype=np.float32),
-            "hand_init_pos": np.array([0, 0.6, 0.2], dtype=np.float32),
         }
         self.obj_init_pos = self.init_config["obj_init_pos"]
         self.obj_init_angle = self.init_config["obj_init_angle"]
-        self.hand_init_pos = self.init_config["hand_init_pos"]
+
 
         goal_low = self.hand_low
         goal_high = self.hand_high
@@ -91,6 +90,11 @@ class SawyerDrawerOpenEnvV2(SawyerXYZEnv):
         return self.data.body("drawer_link").xquat
 
     def reset_model(self) -> npt.NDArray[np.float64]:
+        self.hand_init_pos = self.np_random.uniform(
+            self.hand_low,
+            self.hand_high,
+            size=self.hand_low.shape[0]
+        )
         self._reset_hand()
         self.prev_obs = self._get_curr_obs_combined_no_goal()
 
