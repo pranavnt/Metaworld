@@ -3,6 +3,7 @@ and organising them into various collections and splits for the benchmarks."""
 
 from __future__ import annotations
 
+import os
 import re
 from collections import OrderedDict
 from typing import Dict, List, Literal
@@ -186,6 +187,10 @@ def _create_observable_goal_envs(all_envs: EnvDict) -> EnvDict:
             super(type(env), env).__init__()
 
             env._partially_observable = False
+            # if "METAWORLD_HARD=true" is set as an environment variable,
+            # then the random vector is frozen at reset
+            if os.environ.get("METAWORLD_HARD"):
+                env._freeze_rand_vec = True
 
             env._set_task_called = True
             env.render_mode = render_mode

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+import os
 import pickle
 from typing import Any, Callable, Literal, SupportsFloat
 
@@ -674,10 +675,10 @@ class SawyerXYZEnv(SawyerMocapBase, EzPickle):
 
     def _get_state_rand_vec(self) -> npt.NDArray[np.float64]:
         """Gets or generates a random vector for the hand position at reset."""
-        if False: # self._freeze_rand_vec:
+        if False if os.environ.get("METAWORLD_HARD") else self._freeze_rand_vec:
             assert self._last_rand_vec is not None
             return self._last_rand_vec
-        elif False: # self.seeded_rand_vec:
+        elif False if os.environ.get("METAWORLD_HARD") else self.seeded_rand_vec:
             assert self._random_reset_space is not None
             rand_vec = self.np_random.uniform(
                 self._random_reset_space.low,
